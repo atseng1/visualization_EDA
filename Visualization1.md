@@ -318,7 +318,7 @@ weather_df %>%
 do we see? We saw in geom\_density that these densities were stacked on
 top of one another. Ridge plots show us the densities per location.
 
-## Saving and embedding plots
+## Saving plots
 
 ``` r
 weather_plot = ggplot(weather_df, aes(x = tmin, y = tmax)) + 
@@ -331,4 +331,40 @@ ggsave("weather_plot.pdf", weather_plot, width = 8, height = 5)
 
 DON’T use the built-in “Export” button\! If you do, your figure is not
 reproducible – no one will know how your plot was exported. Instead, use
-ggsave().
+ggsave(). You should name and save your plot before exporting because by
+default, ggplot will export your latest plot.
+
+## Embedding plots in R Markdown with fig.width
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name, alpha = 0.4)) +
+  geom_smooth(se = FALSE)
+```
+
+    ## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
+
+    ## Warning: Removed 15 rows containing non-finite values (stat_smooth).
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](Visualization1_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+Being compressed in the R window
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name, alpha = 0.4)) +
+  geom_smooth(se = FALSE)
+```
+
+    ## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
+
+    ## Warning: Removed 15 rows containing non-finite values (stat_smooth).
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](Visualization1_files/figure-gfm/unnamed-chunk-19-1.png)<!-- --> Now
+is being stretched in the R window Be careful how your plots are
+actually displayed
