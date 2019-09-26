@@ -187,4 +187,148 @@ ggplot(weather_df, aes(x = date, y = tmax, color = name)) +
 ![](Visualization1_files/figure-gfm/unnamed-chunk-8-1.png)<!-- --> We
 see that there’s not much of a difference for Waikiki around the year.
 
-## Some extra stuff
+# Some extra stuff
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = date, y = tmax, color = name)) +
+  geom_smooth(se = FALSE, alpha = 0.5)
+```
+
+    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_smooth).
+
+![](Visualization1_files/figure-gfm/unnamed-chunk-9-1.png)<!-- --> You
+don’t have to have ALL the geoms every time (the geoms that you pick are
+up to you). Pick what’s useful to you.
+
+2d density
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_hex()
+```
+
+    ## Warning: Removed 15 rows containing non-finite values (stat_binhex).
+
+![](Visualization1_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+## More kinds of plots\!\!
+
+Univariate plots:
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmax, fill = name)) +
+  geom_histogram(position = "dodge")
+```
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_bin).
+
+![](Visualization1_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+Histogram: gives me some idea of distribution Histogram has two types of
+aes preferences. One is the outline of the bars (color), one is fill (f)
+Don’t need to define a y-axis for histograms.
+
+3 separate histograms:
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmax, fill = name)) +
+  geom_histogram() +
+  facet_grid(. ~ name)
+```
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_bin).
+
+![](Visualization1_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+Density plots:
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmax, fill = name)) +
+  geom_density(alpha = 0.3)
+```
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_density).
+
+![](Visualization1_files/figure-gfm/unnamed-chunk-13-1.png)<!-- --> Can
+make comparisons across locations more easily. Prof’s favorite of the
+histograms.
+
+Box plots:
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = name, y = tmax)) + 
+  geom_boxplot()
+```
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_boxplot).
+
+![](Visualization1_files/figure-gfm/unnamed-chunk-14-1.png)<!-- --> For
+each distribution, we are getting an individual box plot per location.
+
+Violin plots (not preferrable or particularly useful):
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = name, y = tmax)) + 
+  geom_violin()
+```
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_ydensity).
+
+![](Visualization1_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = name, y = tmax)) + 
+  geom_violin(aes(fill = name), color = "blue", alpha = .5) + 
+  stat_summary(fun.y = median, geom = "point", color = "blue", size = 4)
+```
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_ydensity).
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_summary).
+
+![](Visualization1_files/figure-gfm/unnamed-chunk-15-2.png)<!-- -->
+Violin plots could be useful to see if a particular group was bimodal.
+
+Ridge plots:
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmax, y = name)) + 
+  geom_density_ridges(scale = .85)
+```
+
+    ## Picking joint bandwidth of 1.84
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_density_ridges).
+
+![](Visualization1_files/figure-gfm/unnamed-chunk-16-1.png)<!-- --> What
+do we see? We saw in geom\_density that these densities were stacked on
+top of one another. Ridge plots show us the densities per location.
+
+## Saving and embedding plots
+
+``` r
+weather_plot = ggplot(weather_df, aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = .5) 
+
+ggsave("weather_plot.pdf", weather_plot, width = 8, height = 5)
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+DON’T use the built-in “Export” button\! If you do, your figure is not
+reproducible – no one will know how your plot was exported. Instead, use
+ggsave().
