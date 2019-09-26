@@ -1,0 +1,13 @@
+---
+title: "Visualization 1"
+author: "Ashley Tseng"
+date: "9/26/2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+```
+
