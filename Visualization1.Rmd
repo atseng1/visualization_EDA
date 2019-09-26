@@ -109,3 +109,10 @@ ggplot(weather_df, aes(x = date, y = tmax, color = name)) +
 ```
 We see that there's not much of a difference for Waikiki around the year.
 
+
+## Some extra stuff
+```{r}
+
+```
+
+
