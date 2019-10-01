@@ -1,0 +1,53 @@
+---
+title: "`ggplot` 2"
+author: "Ashley Tseng"
+date: "10/1/2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(ggridges)
+```
+Note that `ggplot2` is automatically loaded once we load the tidyverse.
+`ggridges` won't override any of the packages we have already loaded.
+
+## Load dataset
+```{r load_data, cache = TRUE}
+weather_df = 
+  rnoaa::meteo_pull_monitors(c("USW00094728", "USC00519397", "USS0023B17S"),
+                      var = c("PRCP", "TMIN", "TMAX"), 
+                      date_min = "2017-01-01",
+                      date_max = "2017-12-31") %>%
+  mutate(
+    name = recode(id, USW00094728 = "CentralPark_NY", 
+                      USC00519397 = "Waikiki_HA",
+                      USS0023B17S = "Waterhole_WA"),
+    tmin = tmin / 10,
+    tmax = tmax / 10) %>%
+  select(name, id, everything())
+```
+Inside the rNOAA package, there is a dataset that we want. This lets us interact with the NOAA servers and tell them what monitors we want data from. We will recode the IDs with `mutate`.
+
+## Making new plots
+Start with an old plot:
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = 0.5)
+```
+
+Add labels:
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = 0.5) +
+  labs (
+    title = "Temperature plot",
+    x = "Minimum Temp (C)",
+    y = "Maximum Temp (C)",
+    caption = "Data from NOAA via rnoaa package"
+  )
+```
